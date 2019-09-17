@@ -57,7 +57,7 @@ class Snake:
 
         self.x = randint(1,8) * 50
         self.y = randint(1,8) * 50
-        self.direction = direction.Right
+        self.direction = direction.Left
 
         self.tail = []
         self.tail.append([self.x//squareSize * squareSize, self.y//squareSize * squareSize])
@@ -67,7 +67,7 @@ class Snake:
     def reset(self):
         self.x = 50
         self.y = 50
-        self.direction = direction.Right
+        self.direction = direction.Left
 
         self.tail = []
         self.tail.append([self.x // squareSize * squareSize, self.y // squareSize * squareSize])
@@ -128,20 +128,10 @@ def playWithNet(network, rseed, headless=False, slow=False):
         inputs.append(n.connections[0].parent)
 
     inputDict = {"foodU": inputs[0], "foodR": inputs[1], "wallU": inputs[2], "wallR": inputs[3],
-                 "wallD": inputs[4], "wallL": inputs[5], "foodD": inputs[6], "foodL": inputs[7],
-                 "bodU":inputs[8], "bodR":inputs[9], "bodD":inputs[10], "bodL":inputs[11]}
+                 "wallD": inputs[4], "wallL": inputs[5], "foodD": inputs[6], "foodL": inputs[7]}
 
 
-
-
-
-
-
-
-
-
-
-
+                 #"bodU":inputs[8], "bodR":inputs[9], "bodD":inputs[10], "bodL":inputs[11]}
 
 
     numFrames = 0
@@ -164,83 +154,7 @@ def playWithNet(network, rseed, headless=False, slow=False):
                     pygame.quit()
                     sys.exit()
 
-        bodUDist = height
-        for j in range(1,snake.y//squareSize):
-            if [snake.x//squareSize, (snake.y // squareSize) - (squareSize * j)] in snake.tail:
-                bodUDist = (j * squareSize) - squareSize
-                break
 
-
-
-        bodRDist = width
-        for j in range(1,width - (snake.x // squareSize)):
-            if [(snake.x // squareSize)  - (squareSize * j),snake.y // squareSize] in snake.tail:
-                bodRDist = (j * squareSize) - squareSize
-                break
-
-
-        bodDDist = height
-        for j in range(1,height - (snake.y // squareSize)):
-            if [snake.x // squareSize, (snake.y // squareSize) + (squareSize * j)] in snake.tail:
-                bodDDist = (j * squareSize) - squareSize
-                break
-
-
-        bodLDist = width
-        for j in range(1,snake.x // squareSize):
-            if [(snake.x // squareSize) - (squareSize * j), snake.y // squareSize] in snake.tail:
-                bodLDist = (j * squareSize) - squareSize
-                break
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        foodU = (snake.y - foodLoc[1]) / height
-        if foodU < 0:
-            foodU = 1
-
-        foodR = (foodLoc[0] - snake.x) / width
-        if foodR < 0:
-            foodR = 1
-
-        foodD = (foodLoc[1] - snake.y) / height
-        if foodD < 0:
-            foodD = 1
-
-        foodL = (snake.x - foodLoc[0]) / width
-        if foodL < 0:
-            foodL = 1
-
-        inputDict["foodU"].value = foodU
-        inputDict["foodR"].value = foodR
-        inputDict["wallU"].value = snake.y / height
-        inputDict["wallR"].value = (width - snake.x) / width
-        inputDict["wallD"].value = (500 - snake.y) / height
-        inputDict["wallL"].value = snake.x / height
-        inputDict["foodD"].value = foodD
-        inputDict["foodL"].value = foodL
-        inputDict["bodD"].value = bodDDist/height
-        inputDict["bodL"].value = bodLDist/width
-        inputDict["bodR"].value = bodRDist/width
-        inputDict["bodU"].value = bodUDist/height
-
-
-
-        # inputDict["foodDist"].value = math.sqrt( (snake.x - foodLoc[0])**2 + (snake.y - foodLoc[1])**2) / 500
-
-        network.runNetwork()
 
         # Get output from neural network
         nValues = []
@@ -283,7 +197,72 @@ def playWithNet(network, rseed, headless=False, slow=False):
         snake.move()
         # Give nerual net input and calculate new values
 
+        # bodUDist = height
+        # for j in range(1, snake.y // squareSize):
+        #     if [snake.x // squareSize, (snake.y // squareSize) - (squareSize * j)] in snake.tail:
+        #         bodUDist = (j * squareSize) - squareSize
+        #
+        #         break
+        #
+        # bodRDist = width
+        # for j in range(1, width - (snake.x // squareSize)):
+        #     if [(snake.x // squareSize) - (squareSize * j), snake.y // squareSize] in snake.tail:
+        #         bodRDist = (j * squareSize) - squareSize
+        #
+        #         break
+        #
+        # bodDDist = height
+        # for j in range(1, height - (snake.y // squareSize)):
+        #     if [snake.x // squareSize, (snake.y // squareSize) + (squareSize * j)] in snake.tail:
+        #         bodDDist = (j * squareSize) - squareSize
+        #         print("$$$" + str(bodDDist))
+        #         break
+        #
+        # bodLDist = width
+        # for j in range(1, snake.x // squareSize):
+        #     if [(snake.x // squareSize) - (squareSize * j), snake.y // squareSize] in snake.tail:
+        #         bodLDist = (j * squareSize) - squareSize
+        #         print("$$$" + str(bodLDist))
+        #         break
 
+        foodU = (snake.y - foodLoc[1]) / height
+        if foodU <0:
+            foodU = 1
+
+
+        foodR =(foodLoc[0] - snake.x) / width
+        if foodR < 0:
+            foodR = 1
+
+        foodD = (foodLoc[1] - snake.y) / height
+        if foodD < 0:
+            foodD = 1
+
+        foodL = (snake.x - foodLoc[0]) / width
+        if foodL < 0:
+            foodL = 1
+
+        inputDict["foodU"].value = foodU
+        inputDict["foodR"].value = foodR
+        inputDict["wallU"].value = snake.y / height
+        inputDict["wallR"].value = (width - snake.x) / width
+        inputDict["wallD"].value = (height - snake.y) / height
+        inputDict["wallL"].value = snake.x / height
+        inputDict["foodD"].value = foodD
+        inputDict["foodL"].value = foodL
+        # inputDict["bodD"].value = bodDDist/height
+        # inputDict["bodL"].value = bodLDist/width
+        # inputDict["bodR"].value = bodRDist/width
+        # inputDict["bodU"].value = bodUDist/height
+
+        # inputDict["foodDist"].value = math.sqrt( (snake.x - foodLoc[0])**2 + (snake.y - foodLoc[1])**2) / 500
+
+        # print("*******")
+        #
+        # for x in inputDict.keys():
+        #     print( x + ' ' + str(inputDict[x].value))
+
+        network.runNetwork()
 
 
         if not headless:

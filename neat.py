@@ -3,14 +3,24 @@ import math
 import tkinter as tk
 from random import uniform
 from copy import deepcopy
+from math import tanh
+
+
 test = []
 
 def sigmoid(x):
 
+    try:
+        #ret = 1/(1+math.exp((-1*x)))
+        ret = tanh(float(x))
+
+    except Exception as e:
+        print("There was a problem with the sigmoid")
+        print(x)
+        print(e)
 
 
-
-    return 1/(1+math.exp(-x))
+    return ret
 
 
 
@@ -88,6 +98,25 @@ class Network():
 
         self.inputs = []
         self.outputs = []
+
+    def checkEquality(self, n2):
+        for i in range(len(self.layers)):
+            for j in range(len(self.layers[i].neurons)):
+
+                bias1 = self.layers[i].neurons[j].bias
+                bias2 = n2.layers[i].neurons[j].bias
+
+                if bias1 != bias2:
+                    return False
+
+                for k in range(len(self.layers[i].neurons[j].connections)):
+                    weight1 = self.layers[i].neurons[j].connections[k].weight
+                    weight2 = n2.layers[i].neurons[j].connections[k].weight
+
+                    if weight1 != weight2:
+                        return False
+
+        return True
 
 
     def runNetwork(self):
