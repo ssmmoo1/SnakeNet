@@ -29,7 +29,7 @@ configs = {
     "mutationRate": .02,
     "breedFunction": breedType.mutateOnly,
 
-    "headless": True,
+    "headless": False,
     "slow": False,
     }
 
