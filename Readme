@@ -1,3 +1,7 @@
 
-Documentation WIP but if interested in running a sample run gaSnake.py
-pygame is the only dependency
+Documentation WIP but if interested in running a sample 
+
+pip install pygame
+download all the source files and keep them in the same folder
+run gaSnake.py
+
